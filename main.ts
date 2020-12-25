@@ -35,23 +35,25 @@ const jsonCsv = <T>(objects: Array<T>): string => {
   }
 
   // Add index to csv
-  index.forEach((value, key) => {
-    csv = `"${csv};"`;
+  index.forEach((_value, key) => {
+    console.log("one field is ", key);
+    csv = `${csv}"${key.replaceAll('"', '""')}"|`;
   });
-  csv += "\n";
   
   // Now loop through every object again
   for (let i = 0; i < objects.length; i++) {
+    csv += "\n";
     // For each entry
     Object.entries(objects[i]).forEach(([key, value]) => {
-      // If the index matches
+      // If the card has the specified category in the index
       if (index.get(key)) {
-        csv = `"${csv};"`;
+        // Add the card
+        csv = `${csv}"${value.replaceAll('"', '""')}"|`;
       } else {
-        csv = `${csv};`;
+        // Otherwise don't
+        csv = `${csv}""|`;
       }
     });
-    csv += "\n";
   }
   
   console.log(`successfullly converted ${objects.length} cards!`)
